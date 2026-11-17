@@ -1,0 +1,21 @@
+{
+  "name": "huzaifa-abir-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal portfolio + admin dashboard for Huzaifa Abir (React, Express, MongoDB, Firebase)",
+  "scripts": {
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently -n API,WEB -c blue,magenta \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start",
+    "test": "npm --prefix server test",
+    "seed:admin": "npm --prefix server run seed:admin"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "firebase": "^13.4.0",
+    "mongodb": "^7.9.0"
+  }
+}

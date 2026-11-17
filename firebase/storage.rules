@@ -1,0 +1,15 @@
+rules_version = '2';
+
+// Uploads are written only by the backend (Firebase Admin SDK bypasses these rules).
+// Portfolio images are public-readable; nothing else in the bucket is accessible from the browser.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /portfolio/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
