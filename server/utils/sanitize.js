@@ -46,25 +46,52 @@ const siteOrHttpLink = (v) => {
   return HTTP_URL_RE.test(s) || /^\/(?!\/)/.test(s) ? s : '';
 };
 
-// Accept ImageKit URLs and existing bundled local assets.
-// Keep path as ImageKit fileId, or legacy Firebase path.
+// Accept ImageKit URLs, Firebase Storage URLs and bundled local assets.
 function image(v) {
-  if (!v || typeof v !== 'object') {
+  // Missing or empty image is valid.
+  if (
+    v == null ||
+    v === '' ||
+    (
+      typeof v === 'object' &&
+      !Array.isArray(v) &&
+      !str(v.url, 600) &&
+      !str(v.path, 300)
+    )
+  ) {
     return { url: '', path: '' };
+  }
+
+  if (typeof v !== 'object' || Array.isArray(v)) {
+    throw new HttpError(
+      400,
+      'Invalid image reference. Upload the image again.'
+    );
   }
 
   const url = str(v.url, 600);
   const path = str(v.path, 300);
 
-  const isImageKitUrl =
-    /^https:\/\/ik\.imagekit\.io\/[^\s]+$/i.test(url);
+  let validUrl = false;
 
-  const isFirebaseUrl =
-    url.startsWith('https://firebasestorage.googleapis.com/v0/b/');
+  try {
+    const parsedUrl = new URL(url);
 
-  const isLocalAsset = url.startsWith('/assets/');
+    const isHttps = parsedUrl.protocol === 'https:';
 
-  const urlOk = isImageKitUrl || isFirebaseUrl || isLocalAsset;
+    const isImageKitHost =
+      parsedUrl.hostname === 'ik.imagekit.io' ||
+      parsedUrl.hostname.endsWith('.imagekit.io');
+
+    const isFirebaseHost =
+      parsedUrl.hostname === 'firebasestorage.googleapis.com';
+
+    validUrl =
+      isHttps &&
+      (isImageKitHost || isFirebaseHost);
+  } catch {
+    validUrl = /^\/assets\/[^\s]+$/i.test(url);
+  }
 
   const pathOk =
     path === '' ||
@@ -75,7 +102,7 @@ function image(v) {
       /^[a-zA-Z0-9/_-]+$/.test(path)
     );
 
-  if (!urlOk || !pathOk) {
+  if (!validUrl || !pathOk) {
     throw new HttpError(
       400,
       'Invalid image reference. Upload the image again.'
@@ -200,6 +227,7 @@ const sections = {
     return {
       siteName: required(str(b.siteName, 120), 'Site name'),
       footerText: str(b.footerText, 300),
+      logo: image(b.logo),
     };
   },
 };

@@ -40,7 +40,10 @@ export default function Navbar() {
 
         const progress =
           scrollableHeight > 0
-            ? Math.min(100, Math.max(0, (scrollTop / scrollableHeight) * 100))
+            ? Math.min(
+                100,
+                Math.max(0, (scrollTop / scrollableHeight) * 100)
+              )
             : 0;
 
         setScrollProgress(progress);
@@ -62,6 +65,7 @@ export default function Navbar() {
   }, [location.pathname]);
 
   const name = profile?.siteName || 'Huzaifa Abir';
+  const logoUrl = profile?.logo?.url || '';
 
   const initials = name
     .split(' ')
@@ -108,16 +112,27 @@ export default function Navbar() {
             className="flex items-center gap-2.5 font-semibold tracking-tight"
             aria-label={`${name} home`}
           >
-            <span
-              className="grid h-9 w-9 place-items-center rounded-xl text-sm font-bold text-white"
-              style={{
-                background:
-                  'linear-gradient(120deg,var(--color-accent),var(--color-accent-2))',
-              }}
-            >
-              {initials}
-            </span>
-            <span className="hidden sm:inline">{name}</span>
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={`${name} logo`}
+                className="h-10 w-auto max-w-[150px] object-contain"
+              />
+            ) : (
+              <span
+                className="grid h-9 w-9 place-items-center rounded-xl text-sm font-bold text-white"
+                style={{
+                  background:
+                    'linear-gradient(120deg,var(--color-accent),var(--color-accent-2))',
+                }}
+              >
+                {initials}
+              </span>
+            )}
+
+            {!logoUrl && (
+              <span className="hidden sm:inline">{name}</span>
+            )}
           </Link>
 
           <ul className="hidden items-center gap-1 md:flex">
