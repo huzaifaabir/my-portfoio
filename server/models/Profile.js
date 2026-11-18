@@ -38,17 +38,20 @@ const profileSchema = new Schema(
       type: [{ name: { type: String, maxlength: 60 }, level: { type: Number, min: 0, max: 100, default: 50 }, category: { type: String, default: '', maxlength: 40 }, _id: false }],
       default: [],
     },
-    experience: {
-      type: [{
-        company: { type: String, maxlength: 120 },
-        role: { type: String, maxlength: 120 },
-        startYear: { type: String, maxlength: 10 },
-        endYear: { type: String, default: 'Present', maxlength: 20 },
-        description: { type: String, default: '', maxlength: 600 },
-        _id: false,
-      }],
-      default: [],
-    },
+    
+experience: {
+  type: [{
+    company: { type: String, maxlength: 120 },
+    companyUrl: { type: String, default: '', maxlength: 600 },
+    role: { type: String, maxlength: 120 },
+    startYear: { type: String, maxlength: 10 },
+    endYear: { type: String, default: 'Present', maxlength: 20 },
+    description: { type: String, default: '', maxlength: 600 },
+    _id: false,
+  }],
+  default: [],
+},
+
     services: {
       type: [{ title: { type: String, maxlength: 80 }, description: { type: String, default: '', maxlength: 300 }, icon: { type: String, default: '', maxlength: 20 }, _id: false }],
       default: [],

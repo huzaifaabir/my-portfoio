@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useSite } from '../../context/SiteContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
@@ -25,11 +26,24 @@ const SECTIONS = [
   {
     key: 'experience',
     title: 'Experience',
-    text: 'Work history, newest first. Set end year to "Present" for current roles.',
-    empty: { company: '', role: '', startYear: '', endYear: 'Present', description: '' },
+    text: 'Work history, newest first. Add an optional company website or social page link.',
+    empty: {
+      company: '',
+      companyUrl: '',
+      role: '',
+      startYear: '',
+      endYear: 'Present',
+      description: '',
+    },
     fields: [
       { key: 'role', label: 'Role / title', placeholder: 'Graphic Designer', max: 120 },
       { key: 'company', label: 'Company', placeholder: 'Organisation name', max: 120 },
+      {
+        key: 'companyUrl',
+        label: 'Company website / Facebook / LinkedIn (optional)',
+        placeholder: 'https://example.com',
+        max: 600,
+      },
       { key: 'startYear', label: 'Start year', placeholder: '2024', max: 10 },
       { key: 'endYear', label: 'End year', placeholder: 'Present', max: 20 },
       { key: 'description', label: 'Description (optional)', type: 'textarea', placeholder: 'What you did in this role', max: 600 },
@@ -61,13 +75,19 @@ export default function ResumeEditor() {
 
   if (loading) return <PageLoader />;
   if (error || !profile) return <ErrorState message={error} onRetry={refresh} />;
+
   if (!drafts) {
-    setDrafts({ skills: profile.skills || [], experience: profile.experience || [], services: profile.services || [] });
+    setDrafts({
+      skills: profile.skills || [],
+      experience: profile.experience || [],
+      services: profile.services || [],
+    });
     return null;
   }
 
   async function save(section) {
     setSaving(section);
+
     try {
       await staffApi.updateSection(section, drafts[section]);
       await refresh();
@@ -81,7 +101,11 @@ export default function ResumeEditor() {
 
   return (
     <div>
-      <PageHeader title="Skills & experience" text="Keep your resume information current. Each section saves separately." />
+      <PageHeader
+        title="Skills & experience"
+        text="Keep your resume information current. Each section saves separately."
+      />
+
       <div className="space-y-8">
         {SECTIONS.map((s) => (
           <section key={s.key} className="card space-y-6">
@@ -89,17 +113,27 @@ export default function ResumeEditor() {
               <h2 className="text-xl font-semibold">{s.title}</h2>
               <p className="mt-1 text-sm text-muted">{s.text}</p>
             </div>
+
             <ListEditor
               items={drafts[s.key]}
-              onChange={(items) => setDrafts((d) => ({ ...d, [s.key]: items }))}
+              onChange={(items) =>
+                setDrafts((d) => ({ ...d, [s.key]: items }))
+              }
               fields={s.fields}
               emptyItem={s.empty}
               addLabel={s.addLabel}
               itemLabel={s.itemLabel}
             />
+
             <div className="flex justify-end">
-              <button className="btn-primary btn-sm" onClick={() => save(s.key)} disabled={saving === s.key}>
-                {saving === s.key ? 'Saving...' : `Save ${s.title.toLowerCase()}`}
+              <button
+                className="btn-primary btn-sm"
+                onClick={() => save(s.key)}
+                disabled={saving === s.key}
+              >
+                {saving === s.key
+                  ? 'Saving...'
+                  : `Save ${s.title.toLowerCase()}`}
               </button>
             </div>
           </section>
