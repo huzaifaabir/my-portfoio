@@ -12,24 +12,34 @@ import { publicApi } from '../lib/services.js';
 
 const SiteContext = createContext(null);
 
-// Updates the browser tab title and favicon.
-function updateBrowserIdentity(profile) {
-  const siteName = profile?.siteName?.trim() || 'Huzaifa Abir';
+const SITE_NAME = 'Designed By Huzaifa';
+const SITE_LOGO = '/assets/logo.png?v=2';
 
-  document.title = `${siteName} | Graphic Designer`;
+// Keep website name and favicon fixed.
+function updateBrowserIdentity() {
+  document.title = `${SITE_NAME} | Graphic Designer`;
 
-  const favicon = document.getElementById('site-favicon');
+  let favicon = document.getElementById('site-favicon');
 
-  if (favicon) {
-    const logoUrl = profile?.logo?.url?.trim();
-
-    favicon.href = logoUrl || '/favicon.svg';
-    favicon.type = logoUrl ? 'image/png' : 'image/svg+xml';
+  if (!favicon) {
+    favicon = document.createElement('link');
+    favicon.id = 'site-favicon';
+    favicon.rel = 'icon';
+    document.head.appendChild(favicon);
   }
+
+  // Remove other favicon references that may override this one.
+  document
+    .querySelectorAll('link[rel~="icon"]:not(#site-favicon)')
+    .forEach((icon) => icon.remove());
+
+  favicon.rel = 'icon';
+  favicon.type = 'image/png';
+  favicon.href = SITE_LOGO;
 }
 
-// Loads the public profile once and shares it.
-// Admin edits call refresh() to update the site.
+// Loads public portfolio content.
+// Website identity is not taken from the API.
 export function SiteProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -42,7 +52,6 @@ export function SiteProvider({ children }) {
       const data = await publicApi.profile();
 
       setProfile(data);
-      updateBrowserIdentity(data);
     } catch (err) {
       setError(err.message || 'Could not load the portfolio content.');
     } finally {
@@ -51,15 +60,13 @@ export function SiteProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    updateBrowserIdentity();
     refresh();
   }, [refresh]);
 
-  // Keep browser identity synchronized with profile changes.
   useEffect(() => {
-    if (profile) {
-      updateBrowserIdentity(profile);
-    }
-  }, [profile]);
+    updateBrowserIdentity();
+  }, []);
 
   const value = useMemo(
     () => ({

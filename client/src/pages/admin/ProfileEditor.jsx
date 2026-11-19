@@ -87,149 +87,6 @@ function SaveBar({ saving, disabled, onSave }) {
   );
 }
 
-// Site Identity Section
-function SiteSection({
-  siteName,
-  footerText,
-  logo,
-  canEdit,
-}) {
-  const [form, setForm] = useState({
-    siteName: siteName || '',
-    footerText: footerText || '',
-    logo: logo || { url: '', path: '' },
-  });
-
-  const { save, saving } = useSave('site');
-
-  const submit = (e) => {
-    e?.preventDefault();
-
-    if (!form.siteName.trim()) return;
-
-    save(form);
-  };
-
-  const removeLogo = () => {
-    setForm((current) => ({
-      ...current,
-      logo: { url: '', path: '' },
-    }));
-  };
-
-  return (
-    <SectionCard
-      title="Site identity"
-      text="Manage your website name and logo. The uploaded logo is used in the Navbar and browser tab favicon."
-      locked={!canEdit}
-    >
-      <form
-        onSubmit={submit}
-        className="grid gap-5 sm:grid-cols-2"
-      >
-        <Field label="Site name" htmlFor="s-name" required>
-          <Input
-            id="s-name"
-            value={form.siteName}
-            onChange={(e) =>
-              setForm((current) => ({
-                ...current,
-                siteName: e.target.value,
-              }))
-            }
-            maxLength={120}
-            disabled={!canEdit}
-          />
-        </Field>
-
-        <Field label="Footer text" htmlFor="s-foot">
-          <Input
-            id="s-foot"
-            value={form.footerText}
-            onChange={(e) =>
-              setForm((current) => ({
-                ...current,
-                footerText: e.target.value,
-              }))
-            }
-            maxLength={300}
-            disabled={!canEdit}
-          />
-        </Field>
-
-        <div className="sm:col-span-2 space-y-3">
-          <div>
-            <h3 className="text-sm font-semibold">
-              Website Logo
-            </h3>
-
-            <p className="mt-1 text-xs text-muted">
-              Upload a transparent PNG logo. It will be used in the
-              Navbar and as the browser favicon.
-            </p>
-          </div>
-
-          {canEdit ? (
-            <div className="w-[100px] max-w-full">
-              <ImageUploader
-                label="Website logo"
-                folder="profile"
-                value={form.logo}
-                onChange={(img) =>
-                  setForm((current) => ({
-                    ...current,
-                    logo: img,
-                  }))
-                }
-                aspect="aspect-square"
-                rounded={false}
-                help="PNG recommended."
-              />
-            </div>
-          ) : form.logo?.url ? (
-            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-lg border border-line bg-surface p-2">
-              <img
-                src={form.logo.url}
-                alt="Website logo preview"
-                className="max-h-full max-w-full object-contain"
-              />
-            </div>
-          ) : (
-            <p className="text-xs text-muted">
-              No website logo uploaded.
-            </p>
-          )}
-
-          {form.logo?.url && canEdit && (
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                className="btn-secondary btn-sm"
-                onClick={removeLogo}
-                disabled={saving}
-              >
-                Remove logo
-              </button>
-
-              <span className="text-xs text-muted">
-                Logo removal will take effect after saving.
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="sm:col-span-2">
-          <SaveBar
-            saving={saving}
-            disabled={!canEdit}
-            onSave={submit}
-          />
-        </div>
-      </form>
-    </SectionCard>
-  );
-}
-
 // Hero Section
 function HeroSection({ hero, canEdit }) {
   const [form, setForm] = useState({
@@ -665,16 +522,6 @@ export default function ProfileEditor() {
       />
 
       <div className="space-y-8">
-
-        {/* Site Identity first */}
-        <SiteSection
-          key={`s-${profile.updatedAt}`}
-          siteName={profile.siteName}
-          footerText={profile.footerText}
-          logo={profile.logo}
-          canEdit={canSettings}
-        />
-
         <HeroSection
           key={`h-${profile.updatedAt}`}
           hero={profile.hero}
@@ -698,7 +545,6 @@ export default function ProfileEditor() {
           socials={profile.socials}
           canEdit={canSettings}
         />
-
       </div>
     </div>
   );

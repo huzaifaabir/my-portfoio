@@ -1,8 +1,10 @@
 
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useSite } from '../context/SiteContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+
+const SITE_NAME = 'Designed By Huzaifa';
+const SITE_LOGO = '/assets/logo.png';
 
 const LINKS = [
   { to: '/', label: 'Home', end: true },
@@ -12,7 +14,6 @@ const LINKS = [
 ];
 
 export default function Navbar() {
-  const { profile } = useSite();
   const { can } = useAuth();
 
   const [open, setOpen] = useState(false);
@@ -64,16 +65,6 @@ export default function Navbar() {
     };
   }, [location.pathname]);
 
-  const name = profile?.siteName || 'Huzaifa Abir';
-  const logoUrl = profile?.logo?.url || '';
-
-  const initials = name
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-
   return (
     <>
       {/* Scroll Progress Bar */}
@@ -107,34 +98,24 @@ export default function Navbar() {
           className="container-x flex h-16 items-center justify-between"
           aria-label="Main navigation"
         >
+          {/* Logo + Website Name */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 font-semibold tracking-tight"
-            aria-label={`${name} home`}
+            className="flex min-w-0 items-center gap-3 font-semibold tracking-tight"
+            aria-label={`${SITE_NAME} home`}
           >
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt={`${name} logo`}
-                className="h-10 w-auto max-w-[150px] object-contain"
-              />
-            ) : (
-              <span
-                className="grid h-9 w-9 place-items-center rounded-xl text-sm font-bold text-white"
-                style={{
-                  background:
-                    'linear-gradient(120deg,var(--color-accent),var(--color-accent-2))',
-                }}
-              >
-                {initials}
-              </span>
-            )}
+            <img
+              src={SITE_LOGO}
+              alt={`${SITE_NAME} logo`}
+              className="h-10 w-10 shrink-0 object-contain"
+            />
 
-            {!logoUrl && (
-              <span className="hidden sm:inline">{name}</span>
-            )}
+            <span className="whitespace-nowrap text-sm font-semibold text-white sm:text-base">
+              {SITE_NAME}
+            </span>
           </Link>
 
+          {/* Desktop Navigation */}
           <ul className="hidden items-center gap-1 md:flex">
             {LINKS.map((l) => (
               <li key={l.to}>
@@ -155,6 +136,7 @@ export default function Navbar() {
             ))}
           </ul>
 
+          {/* Right Actions */}
           <div className="flex items-center gap-2">
             <Link
               to="/contact"
@@ -191,6 +173,7 @@ export default function Navbar() {
               </Link>
             )}
 
+            {/* Mobile Menu Button */}
             <button
               type="button"
               className="grid h-10 w-10 place-items-center rounded-xl border border-line md:hidden"
@@ -220,6 +203,7 @@ export default function Navbar() {
           </div>
         </nav>
 
+        {/* Mobile Navigation */}
         {open && (
           <div
             id="mobile-menu"
