@@ -234,6 +234,7 @@ const sections = {
 
 const TOP_LEVEL_SECTIONS = new Set(['site']);
 
+// Project fields with multiple image support.
 const projectFields = (b) => {
   const title = required(str(b.title, 120), 'Project title');
 
@@ -255,6 +256,25 @@ const projectFields = (b) => {
     );
   }
 
+  // Support up to 20 images per project.
+  const images = Array.isArray(b.images)
+    ? b.images
+        .slice(0, 20)
+        .map((item) => image(item))
+        .filter((item) => item.url)
+    : [];
+
+  // Keep compatibility with projects using the old single image field.
+  const legacyImage = image(b.image);
+
+  // Use the legacy image if no new images array is provided.
+  const finalImages =
+    images.length > 0
+      ? images
+      : legacyImage.url
+        ? [legacyImage]
+        : [];
+
   return {
     title,
     category: str(b.category, 60),
@@ -264,7 +284,13 @@ const projectFields = (b) => {
     clientUrl,
     tags: strList(b.tags, 10, 30),
     link,
-    image: image(b.image),
+
+    // New multiple images field.
+    images: finalImages,
+
+    // First image remains available for older frontend components.
+    image: finalImages[0] || { url: '', path: '' },
+
     featured: bool(b.featured, false),
     published: bool(b.published, true),
     order: num(b.order, 0, 9999, 0),

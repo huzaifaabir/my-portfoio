@@ -1,31 +1,46 @@
+
 import { useEffect, useRef, useState } from 'react';
 
-// Fades a block in when it scrolls into view
-export default function Reveal({ children, className = '', delay = 0 }) {
+export default function Reveal({
+  children,
+  className = '',
+  delay = 0,
+}) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === 'undefined') {
+    const element = ref.current;
+
+    if (!element || typeof IntersectionObserver === 'undefined') {
       setVisible(true);
       return undefined;
     }
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setVisible(true);
-        io.disconnect();
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.12,
+        rootMargin: '0px 0px -30px 0px',
       }
-    }, { threshold: 0.12 });
-    io.observe(el);
-    return () => io.disconnect();
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <div
       ref={ref}
       className={`reveal ${visible ? 'is-visible' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{
+        transitionDelay: visible ? `${delay}ms` : '0ms',
+      }}
     >
       {children}
     </div>

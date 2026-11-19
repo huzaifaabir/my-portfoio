@@ -1,4 +1,5 @@
 
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { publicApi } from '../../lib/services.js';
 import { useAsync } from '../../hooks/useAsync.js';
@@ -15,6 +16,46 @@ export default function ProjectDetail() {
   );
 
   useDocumentTitle(project?.title || 'Project');
+
+  const images = useMemo(() => {
+    if (!project) return [];
+
+    const multipleImages = Array.isArray(project.images)
+      ? project.images.map((image) => imageSrc(image)).filter(Boolean)
+      : [];
+
+    if (multipleImages.length > 0) return multipleImages;
+
+    const singleImage = imageSrc(project.image);
+    return singleImage ? [singleImage] : [];
+  }, [project]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [fade, setFade] = useState(false);
+
+  useEffect(() => {
+    setActiveIndex(0);
+    setFade(false);
+  }, [id]);
+
+  const changeImage = (index) => {
+    if (images.length <= 1 || index === activeIndex) return;
+
+    setFade(true);
+
+    window.setTimeout(() => {
+      setActiveIndex(index);
+      setFade(false);
+    }, 180);
+  };
+
+  const showPrevious = () => {
+    changeImage((activeIndex - 1 + images.length) % images.length);
+  };
+
+  const showNext = () => {
+    changeImage((activeIndex + 1) % images.length);
+  };
 
   if (loading) return <PageLoader />;
 
@@ -33,8 +74,6 @@ export default function ProjectDetail() {
   }
 
   if (!project) return null;
-
-  const src = imageSrc(project.image);
 
   const clientUrl =
     typeof project.clientUrl === 'string' &&
@@ -59,15 +98,70 @@ export default function ProjectDetail() {
         </Link>
 
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-          <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface">
-            {src ? (
-              <img
-                src={src}
-                alt={project.title}
-                className="w-full object-cover"
-              />
-            ) : (
-              <div className="aspect-video w-full bg-surface-2" />
+          <div>
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+              {images.length > 0 ? (
+                <img
+                  src={images[activeIndex]}
+                  alt={`${project.title} - Image ${activeIndex + 1}`}
+                  className={`block w-full object-cover transition-opacity duration-300 ease-in-out ${
+                    fade ? 'opacity-0' : 'opacity-100'
+                  }`}
+                />
+              ) : (
+                <div className="aspect-video w-full bg-surface-2" />
+              )}
+
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={showPrevious}
+                    aria-label="Previous image"
+                    className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/60 text-2xl text-white shadow-lg backdrop-blur transition hover:scale-110 hover:bg-black/85"
+                  >
+                    ‹
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={showNext}
+                    aria-label="Next image"
+                    className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/60 text-2xl text-white shadow-lg backdrop-blur transition hover:scale-110 hover:bg-black/85"
+                  >
+                    ›
+                  </button>
+
+                  <span className="absolute bottom-3 right-3 rounded-full bg-black/65 px-3 py-1 text-xs text-white backdrop-blur">
+                    {activeIndex + 1} / {images.length}
+                  </span>
+                </>
+              )}
+            </div>
+
+            {images.length > 1 && (
+              <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+                {images.map((image, index) => (
+                  <button
+                    key={`${image}-${index}`}
+                    type="button"
+                    onClick={() => changeImage(index)}
+                    aria-label={`Show image ${index + 1}`}
+                    aria-current={activeIndex === index ? 'true' : undefined}
+                    className={`relative h-20 w-24 shrink-0 overflow-hidden rounded-xl border-2 transition ${
+                      activeIndex === index
+                        ? 'border-accent opacity-100'
+                        : 'border-line opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={image}
+                      alt={`${project.title} thumbnail ${index + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
             )}
           </div>
 

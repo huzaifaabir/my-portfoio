@@ -1,9 +1,50 @@
 
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { imageSrc } from '../lib/api.js';
 
-export default function ProjectCard({ project }) {
-  const src = imageSrc(project.image);
+export default function ProjectCard({ project, autoSlide = false }) {
+  const images = useMemo(() => {
+    const multipleImages = Array.isArray(project.images)
+      ? project.images.map((image) => imageSrc(image)).filter(Boolean)
+      : [];
+
+    if (multipleImages.length > 0) {
+      return multipleImages;
+    }
+
+    const singleImage = imageSrc(project.image);
+    return singleImage ? [singleImage] : [];
+  }, [project.images, project.image]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    setActiveIndex(0);
+    setVisible(true);
+  }, [project.id, images.length]);
+
+  useEffect(() => {
+    if (!autoSlide || images.length <= 1) {
+      return undefined;
+    }
+
+    const interval = setInterval(() => {
+      setVisible(false);
+
+      const timeout = setTimeout(() => {
+        setActiveIndex((current) => (current + 1) % images.length);
+        setVisible(true);
+      }, 450);
+
+      return () => clearTimeout(timeout);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [autoSlide, images.length]);
+
+  const src = images[activeIndex] || '';
 
   const clientUrl =
     typeof project.clientUrl === 'string' &&
@@ -24,7 +65,9 @@ export default function ProjectCard({ project }) {
               src={src}
               alt={project.title}
               loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              className={`h-full w-full object-cover transition-opacity duration-700 ease-in-out ${
+                visible ? 'opacity-100' : 'opacity-0'
+              }`}
             />
           ) : (
             <div

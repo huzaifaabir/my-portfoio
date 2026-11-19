@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="container-x flex flex-col gap-8 py-12 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-lg font-semibold">
-            {profile?.siteName || 'Huzaifa Abir'}
+            {profile?.siteName || 'Designed By Huzaifa'}
           </p>
 
           {profile?.footerText && (
