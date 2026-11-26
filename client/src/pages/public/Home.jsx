@@ -218,66 +218,25 @@ export default function Home() {
 
           {/* IMAGE + OUTER TRANSFORM FRAME */}
 
-          <div
-            className="hero-image-container hero-id-stage relative z-[1] mx-auto w-full max-w-md"
-            onPointerMove={(event) => {
-              if (event.pointerType === 'touch') return;
-              const bounds = event.currentTarget.getBoundingClientRect();
-              const x = (event.clientX - bounds.left) / bounds.width;
-              const y = (event.clientY - bounds.top) / bounds.height;
-              const card = event.currentTarget.querySelector('.hero-id-card');
-              if (!card) return;
-              card.style.setProperty('--card-rotate-x', `${(0.5 - y) * 13}deg`);
-              card.style.setProperty('--card-rotate-y', `${(x - 0.5) * 18}deg`);
-              card.style.setProperty('--card-rotate-z', `${(x - 0.5) * 3}deg`);
-            }}
-            onPointerLeave={(event) => {
-              const card = event.currentTarget.querySelector('.hero-id-card');
-              if (!card) return;
-              card.style.setProperty('--card-rotate-x', '0deg');
-              card.style.setProperty('--card-rotate-y', '0deg');
-              card.style.setProperty('--card-rotate-z', '0deg');
-            }}
-          >
+          <div className="hero-image-container relative z-[1] mx-auto w-full max-w-md">
             <div
               aria-hidden="true"
-              className="hero-id-glow absolute -inset-8 rounded-[2.5rem] opacity-60 blur-3xl"
-              style={{ background: 'linear-gradient(120deg,var(--color-accent),var(--color-accent-2))' }}
+              className="absolute -inset-4 rounded-[2rem] opacity-45 blur-2xl"
+              style={{ background: 'linear-gradient(135deg,var(--color-accent),var(--color-accent-2))' }}
             />
-
-            <div className="hero-id-hanger">
-              <div className="hero-id-strap" aria-hidden="true">
-                <span className="hero-id-strap-edge" />
-                <span className="hero-id-strap-label">HUZAIFA ABIR</span>
-              </div>
-              <div className="hero-id-clip" aria-hidden="true">
-                <span />
-              </div>
-
-              <div className="hero-id-card">
-                <div className="hero-id-card-top">
-                  <span className="hero-id-card-mark">HA</span>
-                  <span className="hero-id-card-label">CREATIVE PORTFOLIO</span>
+            <div className="hero-image-frame relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface shadow-2xl shadow-black/30">
+              {heroImage ? (
+                <img
+                  src={heroImage}
+                  alt={hero.name}
+                  className="h-full w-full object-cover object-top"
+                  fetchPriority="high"
+                />
+              ) : (
+                <div className="grid h-full place-items-center text-7xl font-bold gradient-text">
+                  HA
                 </div>
-                <div className="hero-image-frame">
-                  {heroImage ? (
-                    <img
-                      src={heroImage}
-                      alt={hero.name}
-                      className="h-full w-full object-cover object-top"
-                      fetchPriority="high"
-                    />
-                  ) : (
-                    <div className="grid h-full place-items-center text-7xl font-bold gradient-text">
-                      HA
-                    </div>
-                  )}
-                </div>
-                <div className="hero-id-card-footer">
-                  <span className="hero-id-name">{hero.name || 'HUZAIFA ABIR'}</span>
-                  <span className="hero-id-role">{hero.title || 'DESIGNER & VIDEO EDITOR'}</span>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
