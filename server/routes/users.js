@@ -1,6 +1,4 @@
-// Staff management.
-// Super Admin: can manage admins and editors. Admin: can manage editors only.
-// The Super Admin is protected, and the last active administrator can never be removed or demoted.
+
 const router = require('express').Router();
 const { getAuth } = require('firebase-admin/auth');
 const crypto = require('crypto');

@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const { detectImageType } = require('../utils/fileType');
 const HttpError = require('../utils/httpError');
 
-const ALLOWED_FOLDERS = new Set(['profile', 'projects']);
+const ALLOWED_FOLDERS = new Set(['profile', 'projects', 'brands']);
 
 let imageKitClientPromise;
 
