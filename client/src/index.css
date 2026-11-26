@@ -459,11 +459,45 @@
    CLEAN HERO PORTRAIT
 ========================================= */
 
+@property --hero-lens-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 .hero-image-frame {
   isolation: isolate;
   border-radius: 1.75rem;
   box-shadow: 0 24px 65px rgba(0,0,0,.24);
   transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.hero-image-frame::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--hero-lens-angle),
+    transparent 0deg 285deg,
+    rgba(255,255,255,.12) 305deg,
+    rgba(255,255,255,.9) 322deg,
+    var(--color-accent) 332deg,
+    rgba(255,255,255,.2) 342deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: hero-lens-orbit 7s linear infinite;
+}
+
+@keyframes hero-lens-orbit {
+  to { --hero-lens-angle: 360deg; }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -474,7 +508,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-image-frame { transition: none; }
+   .hero-image-frame { transition: none; }
+  .hero-image-frame::after { animation: none; }
 }
 
 /* =========================================
