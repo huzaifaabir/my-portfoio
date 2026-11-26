@@ -2,11 +2,17 @@
 const router = require('express').Router();
 
 const { requireRole } = require('../middleware/auth');
-const { imageUpload } = require('../middleware/upload');
-const { uploadImage, deleteImage } = require('../services/storage');
+const {
+  imageUpload,
+  multipleImageUpload,
+} = require('../middleware/upload');
+const {
+  uploadImage,
+  deleteImage,
+} = require('../services/storage');
 const HttpError = require('../utils/httpError');
 
-// Upload project/profile image.
+// Upload a single project/profile image.
 router.post(
   '/',
   ...requireRole('editor'),
@@ -32,10 +38,10 @@ router.post(
           folder
         );
 
-        if (!uploaded || !uploaded.url || !uploaded.path) {
+        if (!uploaded?.url || !uploaded?.path) {
           throw new HttpError(
             502,
-            'Image upload failed. ImageKit did not return valid image information.'
+            'ImageKit did not return valid image information.'
           );
         }
 
@@ -53,7 +59,63 @@ router.post(
   }
 );
 
-// Delete uploaded image.
+// Upload multiple Brand Partner logos in one request.
+// Maximum: 10 images, 5 MB per image.
+router.post(
+  '/batch',
+  ...requireRole('editor'),
+  (req, res, next) => {
+    multipleImageUpload(req, res, async (err) => {
+      if (err) {
+        return next(err);
+      }
+
+      const uploadedImages = [];
+
+      try {
+        if (!Array.isArray(req.files) || req.files.length === 0) {
+          throw new HttpError(400, 'Please choose at least one image.');
+        }
+
+        for (const file of req.files) {
+          const uploaded = await uploadImage(
+            file.buffer,
+            'brands'
+          );
+
+          if (!uploaded?.url || !uploaded?.path) {
+            throw new HttpError(
+              502,
+              'ImageKit did not return valid image information.'
+            );
+          }
+
+          uploadedImages.push(uploaded);
+        }
+
+        return res.status(201).json({
+          message: 'Brand logos uploaded successfully.',
+          items: uploadedImages,
+        });
+      } catch (error) {
+        // Remove already uploaded files if a later upload fails.
+        await Promise.allSettled(
+          uploadedImages.map((item) => deleteImage(item.path))
+        );
+
+        console.error('Batch image upload error:', {
+          message: error.message,
+          status: error.status,
+          response: error.response?.data,
+        });
+
+        return next(error);
+      }
+    });
+  }
+);
+
+// Delete an uploaded ImageKit image.
 router.delete(
   '/',
   ...requireRole('editor'),
