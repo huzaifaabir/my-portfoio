@@ -124,9 +124,9 @@ export default function Navbar() {
                   to={l.to}
                   end={l.end}
                   className={({ isActive }) =>
-                    `rounded-full px-4 py-2 text-sm transition ${
+                    `nav-link rounded-full px-4 py-2 text-sm transition ${
                       isActive
-                        ? 'bg-white/10 text-white'
+                        ? 'bg-white/[0.08] text-white'
                         : 'text-muted hover:text-white'
                     }`
                   }
@@ -208,7 +208,7 @@ export default function Navbar() {
         {open && (
           <div
             id="mobile-menu"
-            className="border-t border-line bg-bg/95 backdrop-blur-xl md:hidden"
+            className="mobile-menu-panel border-t border-line bg-bg/95 backdrop-blur-xl md:hidden"
           >
             <ul className="container-x flex flex-col gap-1 py-4">
               {LINKS.map((l) => (
@@ -217,8 +217,8 @@ export default function Navbar() {
                     to={l.to}
                     end={l.end}
                     className={({ isActive }) =>
-                      `block rounded-xl px-4 py-3 text-base ${
-                        isActive ? 'bg-white/10 text-white' : 'text-muted'
+                      `block rounded-xl px-4 py-3 text-base transition-colors ${
+                        isActive ? 'bg-white/10 text-white' : 'text-muted hover:bg-white/5 hover:text-white'
                       }`
                     }
                   >

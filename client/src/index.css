@@ -39,7 +39,11 @@
 
   body {
     margin: 0;
-    background: var(--color-bg);
+    background:
+      radial-gradient(ellipse at 12% 8%, rgba(124,92,255,.075), transparent 34%),
+      radial-gradient(ellipse at 88% 22%, rgba(236,67,130,.065), transparent 30%),
+      var(--color-bg);
+    background-attachment: fixed;
     color: var(--color-text);
     font-family: var(--font-sans);
     line-height: 1.65;
@@ -968,4 +972,150 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .brand-marquee-track { animation: none; }
+}
+
+
+/* =========================================
+   INTERACTION POLISH
+========================================= */
+
+html {
+  scrollbar-color: rgba(236,67,130,.55) var(--color-bg);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--color-bg);
+  border-radius: 999px;
+  background: linear-gradient(180deg,var(--color-accent),var(--color-accent-2));
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary,
+.btn-ghost,
+.btn-danger {
+  transform: translateY(0);
+  transition:
+    transform .25s cubic-bezier(.2,.8,.2,1),
+    box-shadow .25s ease,
+    filter .25s ease,
+    background-color .25s ease;
+}
+
+.btn-primary:hover,
+.btn-ghost:hover,
+.btn-danger:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary:active,
+.btn-ghost:active,
+.btn-danger:active {
+  transform: translateY(0) scale(.98);
+}
+
+.card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.card-hover {
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1),
+    border-color .3s ease,
+    box-shadow .35s ease,
+    background-color .3s ease;
+}
+
+.hero-image-frame img {
+  transition: transform .8s cubic-bezier(.2,.8,.2,1);
+}
+
+.hero-image-container:hover .hero-image-frame img {
+  transform: scale(1.025);
+}
+
+.nav-link {
+  position: relative;
+  isolation: isolate;
+  transition: color .25s ease, background-color .25s ease;
+}
+
+.nav-link::after {
+  position: absolute;
+  right: 16px;
+  bottom: 5px;
+  left: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,var(--color-accent),var(--color-accent-2));
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1);
+}
+
+.nav-link[aria-current="page"]::after,
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.mobile-menu-panel {
+  transform-origin: top;
+  animation: mobile-menu-in .24s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes mobile-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@media (hover: none) {
+  .hero-image-container:hover .hero-image-frame img {
+    transform: none;
+  }
+
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .btn-danger:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .brand-marquee-track {
+    animation: none !important;
+  }
+
+  .mobile-menu-panel {
+    animation: none !important;
+  }
 }
