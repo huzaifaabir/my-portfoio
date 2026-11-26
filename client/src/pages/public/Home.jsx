@@ -240,15 +240,6 @@ export default function Home() {
               )}
             </div>
 
-            {heroImage && (
-              <div className="hero-identity-badge" aria-label="Creative professional: Design, Video, Storytelling">
-                <span className="hero-identity-dot" />
-                <span className="hero-identity-copy">
-                  <span className="hero-identity-label">Creative Professional</span>
-                  <span className="hero-identity-skills">Design <i /> Video <i /> Storytelling</span>
-                </span>
-              </div>
-            )}
           </div>
         </div>
       </section>
