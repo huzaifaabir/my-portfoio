@@ -12,6 +12,7 @@ const MENU = [
   { to: '/admin/resume', label: 'Skills & Experience', icon: '⭐', permission: 'manageContent' },
   { to: '/admin/projects', label: 'Projects', icon: '🖼️', permission: 'manageContent' },
   { to: '/admin/brand-partners', label: 'Brand Partners', icon: '🤝', permission: 'manageContent' },
+  { to: '/admin/services', label: 'Services & Pricing', icon: '💳', permission: 'manageContent' },
   { to: '/admin/messages', label: 'Messages', icon: '✉️', permission: 'manageMessages' },
   { to: '/admin/users', label: 'Users & Access', icon: '🔑', permission: 'manageUsers' },
   { to: '/admin/account', label: 'My account', icon: '⚙️' },

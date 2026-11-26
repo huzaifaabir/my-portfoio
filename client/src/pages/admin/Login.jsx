@@ -15,6 +15,7 @@ export default function Login() {
   const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -71,7 +72,25 @@ export default function Login() {
               <Input id="login-email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} invalid={!!emailError} />
             </Field>
             <Field label="Password" htmlFor="login-password">
-              <Input id="login-password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <div className="relative">
+                <Input
+                  id="login-password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pr-14"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-3 my-auto text-xs font-medium text-muted hover:text-white"
+                  onClick={() => setShowPassword((value) => !value)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </Field>
             {error && <p role="alert" className="error-text">{error}</p>}
             <button type="submit" className="btn-primary w-full" disabled={busy || !firebaseReady}>

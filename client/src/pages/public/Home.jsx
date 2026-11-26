@@ -9,6 +9,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
 import { imageSrc } from '../../lib/api.js';
 
 import ProjectCard from '../../components/ProjectCard.jsx';
+import BrandPartnersMarquee from '../../components/BrandPartnersMarquee.jsx';
 import Reveal from '../../components/Reveal.jsx';
 
 import {
@@ -278,6 +279,8 @@ export default function Home() {
         </div>
       </section>
 
+      <BrandPartnersMarquee />
+
       {/* ABOUT */}
 
       {(about.bio || about.highlights?.length > 0) && (
@@ -321,6 +324,9 @@ export default function Home() {
                   </div>
                 </Reveal>
               ))}
+            </div>
+            <div className="mt-8 text-center">
+              <Link to="/services" className="btn-ghost btn-sm">View services & pricing →</Link>
             </div>
           </div>
         </section>

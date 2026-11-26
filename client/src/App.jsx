@@ -19,6 +19,8 @@ import Messages from './pages/admin/Messages.jsx';
 import Users from './pages/admin/Users.jsx';
 import Account from './pages/admin/Account.jsx';
 import BrandPartners from './pages/admin/BrandPartners.jsx';
+import Services from './pages/public/Services.jsx';
+import ServicesManager from './pages/admin/ServicesManager.jsx';
 
 export default function App() {
   return (
@@ -30,6 +32,7 @@ export default function App() {
         <Route path="projects" element={<Projects />} />
         <Route path="projects/:id" element={<ProjectDetail />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="services" element={<Services />} />
         <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFound />} />
       </Route>
@@ -50,6 +53,7 @@ export default function App() {
         <Route path="resume" element={<ResumeEditor />} />
         <Route path="projects" element={<ProjectsList />} />
         <Route path="projects/new" element={<ProjectEditor />} />
+        <Route path="services" element={<RequirePermission permission="manageContent"><ServicesManager /></RequirePermission>} />
         <Route path="projects/:id/edit" element={<ProjectEditor />} />
 
         <Route

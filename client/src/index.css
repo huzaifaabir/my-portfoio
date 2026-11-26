@@ -923,3 +923,49 @@
     animation: none;
   }
 }
+
+
+/* Brand partners logo marquee */
+.brand-marquee {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.brand-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  animation: brand-marquee-scroll 34s linear infinite;
+}
+.brand-marquee:hover .brand-marquee-track {
+  animation-play-state: paused;
+}
+.brand-marquee-logo {
+  display: flex;
+  height: 76px;
+  min-width: 140px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+}
+.brand-marquee-logo img {
+  max-width: 150px;
+  max-height: 52px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: .65;
+  transition: filter .3s ease, opacity .3s ease, transform .3s ease;
+}
+.brand-marquee-logo:hover img {
+  filter: grayscale(0);
+  opacity: 1;
+  transform: scale(1.06);
+}
+@keyframes brand-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-marquee-track { animation: none; }
+}

@@ -7,6 +7,7 @@ export const publicApi = {
   projects: (params) => request(`/projects${query(params)}`),
   project: (id) => request(`/projects/${id}`),
   brandPartners: () => request('/brand-partners'),
+  services: () => request('/services'),
   sendMessage: (payload) => request('/messages', { method: 'POST', body: payload }),
 };
 
@@ -23,6 +24,10 @@ export const staffApi = {
   deleteProject: (id) => request(`/projects/${id}`, { method: 'DELETE', auth: true }),
 
   manageBrandPartners: () => request('/brand-partners/manage', { auth: true }),
+  manageServices: () => request('/services/manage', { auth: true }),
+  createService: (data) => request('/services', { method: 'POST', body: data, auth: true }),
+  updateService: (id, data) => request(`/services/${id}`, { method: 'PUT', body: data, auth: true }),
+  deleteService: (id) => request(`/services/${id}`, { method: 'DELETE', auth: true }),
   createBrandPartner: (data) => request('/brand-partners', { method: 'POST', body: data, auth: true }),
   updateBrandPartner: (id, data) => request(`/brand-partners/${id}`, { method: 'PUT', body: data, auth: true }),
   deleteBrandPartner: (id) => request(`/brand-partners/${id}`, { method: 'DELETE', auth: true }),

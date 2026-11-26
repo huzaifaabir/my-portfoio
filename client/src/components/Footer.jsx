@@ -40,6 +40,10 @@ export default function Footer() {
               About
             </Link>
 
+            <Link to="/services" className="hover:text-white">
+              Services
+            </Link>
+
             <Link to="/contact" className="hover:text-white">
               Contact
             </Link>

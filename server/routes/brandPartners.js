@@ -5,6 +5,7 @@ const { requireRole } = require('../middleware/auth');
 const HttpError = require('../utils/httpError');
 const { image, str } = require('../utils/sanitize');
 const { withId } = require('../utils/serialize');
+const { deleteImage } = require('../services/storage');
 
 function validateWebsite(value) {
   const website = str(value, 600);
@@ -117,7 +118,16 @@ router.delete('/:id', ...requireRole('editor'), async (req, res, next) => {
       throw new HttpError(404, 'Brand partner not found.');
     }
 
+    const imagePath = partner.logo?.path;
     await partner.deleteOne();
+
+    if (imagePath) {
+      try {
+        await deleteImage(imagePath);
+      } catch (deleteError) {
+        console.error('Could not delete brand logo:', deleteError);
+      }
+    }
 
     res.json({ message: 'Brand partner deleted.' });
   } catch (err) {

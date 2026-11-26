@@ -62,6 +62,7 @@ app.use('/api/messages', require('./routes/messages'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/brand-partners', require('./routes/brandPartners'));
+app.use('/api/services', require('./routes/services'));
 app.use('/api/admin', require('./routes/admin'));
 
 app.use(notFound);

@@ -15,6 +15,8 @@ function PartnerCard({ partner, onSave, onDelete, onMove, saving }) {
   const [name, setName] = useState(partner.name || '');
   const [website, setWebsite] = useState(partner.website || '');
   const [isActive, setIsActive] = useState(partner.isActive);
+  const toast = useToast();
+  const [replacing, setReplacing] = useState(false);
 
   async function save() {
     await onSave(partner.id, {
@@ -24,6 +26,38 @@ function PartnerCard({ partner, onSave, onDelete, onMove, saving }) {
       isActive,
       order: partner.order || 0,
     });
+  }
+
+  async function replaceLogo(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      throw new Error('Choose a JPG, PNG, WEBP or GIF image up to 5 MB.');
+    }
+    setReplacing(true);
+    try {
+      const uploaded = await staffApi.uploadImage(file, 'brands');
+      try {
+        await onSave(partner.id, {
+          name: name.trim(),
+          website: website.trim(),
+          logo: uploaded,
+          isActive,
+          order: partner.order || 0,
+        });
+      } catch {
+        await staffApi.deleteUpload(uploaded.path).catch(() => {});
+        return;
+      }
+      if (partner.logo?.path && partner.logo.path !== uploaded.path) {
+        await staffApi.deleteUpload(partner.logo.path).catch(() => {});
+      }
+    } catch (err) {
+      toast.error(errorMessage(err));
+    } finally {
+      setReplacing(false);
+    }
   }
 
   async function toggleActive(checked) {
@@ -69,6 +103,9 @@ function PartnerCard({ partner, onSave, onDelete, onMove, saving }) {
       </div>
 
       <div className="space-y-3">
+        <Field label="Replace logo" help="JPG, PNG, WEBP or GIF, maximum 5 MB.">
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={replaceLogo} disabled={replacing || saving} className="input text-sm" />
+        </Field>
         <Field label="Brand name">
           <Input
             value={name}
@@ -99,10 +136,11 @@ function PartnerCard({ partner, onSave, onDelete, onMove, saving }) {
           type="button"
           className="btn-primary btn-sm"
           onClick={save}
-          disabled={saving || !name.trim()}
+          disabled={saving || replacing || !name.trim()}
         >
           Save changes
         </button>
+        {replacing && <span className="self-center text-xs text-muted">Uploading replacement...</span>}
 
         <button
           type="button"
