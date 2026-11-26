@@ -54,12 +54,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// API routes
 app.use('/api/me', require('./routes/me'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/uploads', require('./routes/uploads'));
+app.use('/api/brand-partners', require('./routes/brandPartners'));
 app.use('/api/admin', require('./routes/admin'));
 
 app.use(notFound);
