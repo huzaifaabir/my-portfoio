@@ -12,11 +12,11 @@ export default function BrandPartnersMarquee() {
   const repeated = [...partners, ...partners];
 
   return (
-    <section className="border-y border-line/70 py-9 sm:py-12" aria-label="Brand partners">
+    <section className="border-y border-line/70 py-9 sm:py-12" aria-label="Brands I’ve worked with">
       <div className="container-x mb-6 text-center">
         <Reveal>
-          <p className="eyebrow">Trusted collaborations</p>
-          <h2 className="mt-2 text-xl font-semibold sm:text-2xl">Brand Partners</h2>
+          <p className="eyebrow">Selected clients &amp; brands</p>
+          <h2 className="mt-2 text-xl font-semibold sm:text-2xl">Brands I’ve Worked With</h2>
         </Reveal>
       </div>
       <div className="brand-marquee">

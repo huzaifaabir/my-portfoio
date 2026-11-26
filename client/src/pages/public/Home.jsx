@@ -215,7 +215,7 @@ export default function Home() {
           style={{ background: 'radial-gradient(closest-side,var(--color-accent-2),transparent)' }}
         />
 
-        <div className="container-x grid items-center gap-14 pb-0 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="container-x grid items-center gap-14 pb-12 sm:pb-16 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="relative z-[1]">
             {hero.badge && (
               <span className="hero-badge badge mb-6 gap-2 bg-white/5 text-text">
