@@ -1,3 +1,4 @@
+
 import { Navigate, Route, Routes } from 'react-router-dom';
 import PublicLayout from './components/PublicLayout.jsx';
 import { RequirePermission, RequireStaff } from './components/RequireStaff.jsx';
@@ -17,6 +18,7 @@ import ProjectEditor from './pages/admin/ProjectEditor.jsx';
 import Messages from './pages/admin/Messages.jsx';
 import Users from './pages/admin/Users.jsx';
 import Account from './pages/admin/Account.jsx';
+import BrandPartners from './pages/admin/BrandPartners.jsx';
 
 export default function App() {
   return (
@@ -34,15 +36,49 @@ export default function App() {
 
       {/* Admin dashboard */}
       <Route path="admin/login" element={<Login />} />
-      <Route path="admin" element={<RequireStaff><AdminLayout /></RequireStaff>}>
+
+      <Route
+        path="admin"
+        element={
+          <RequireStaff>
+            <AdminLayout />
+          </RequireStaff>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<ProfileEditor />} />
         <Route path="resume" element={<ResumeEditor />} />
         <Route path="projects" element={<ProjectsList />} />
         <Route path="projects/new" element={<ProjectEditor />} />
         <Route path="projects/:id/edit" element={<ProjectEditor />} />
-        <Route path="messages" element={<RequirePermission permission="manageMessages"><Messages /></RequirePermission>} />
-        <Route path="users" element={<RequirePermission permission="manageUsers"><Users /></RequirePermission>} />
+
+        <Route
+          path="brand-partners"
+          element={
+            <RequirePermission permission="manageContent">
+              <BrandPartners />
+            </RequirePermission>
+          }
+        />
+
+        <Route
+          path="messages"
+          element={
+            <RequirePermission permission="manageMessages">
+              <Messages />
+            </RequirePermission>
+          }
+        />
+
+        <Route
+          path="users"
+          element={
+            <RequirePermission permission="manageUsers">
+              <Users />
+            </RequirePermission>
+          }
+        />
+
         <Route path="account" element={<Account />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>

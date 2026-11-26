@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -10,6 +11,7 @@ const MENU = [
   { to: '/admin/profile', label: 'Profile & Contact', icon: '👤', permission: 'manageContent' },
   { to: '/admin/resume', label: 'Skills & Experience', icon: '⭐', permission: 'manageContent' },
   { to: '/admin/projects', label: 'Projects', icon: '🖼️', permission: 'manageContent' },
+  { to: '/admin/brand-partners', label: 'Brand Partners', icon: '🤝', permission: 'manageContent' },
   { to: '/admin/messages', label: 'Messages', icon: '✉️', permission: 'manageMessages' },
   { to: '/admin/users', label: 'Users & Access', icon: '🔑', permission: 'manageUsers' },
   { to: '/admin/account', label: 'My account', icon: '⚙️' },
@@ -19,7 +21,8 @@ export default function AdminLayout() {
   const { me, can, logout } = useAuth();
   const toast = useToast();
   const [open, setOpen] = useState(false);
-  const items = MENU.filter((m) => !m.permission || can(m.permission));
+
+  const items = MENU.filter((item) => !item.permission || can(item.permission));
 
   const handleLogout = async () => {
     try {
@@ -61,8 +64,10 @@ export default function AdminLayout() {
         <Link to="/admin" className="flex items-center gap-2 text-lg font-bold">
           <span className="gradient-text">Admin</span> Panel
         </Link>
+
         {userBox}
         {nav}
+
         <div className="mt-auto space-y-2">
           <Link to="/" className="btn-ghost btn-sm w-full">View website ↗</Link>
           <button onClick={handleLogout} className="btn-danger btn-sm w-full">Log out</button>
@@ -71,16 +76,27 @@ export default function AdminLayout() {
 
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex items-center justify-between border-b border-line bg-bg/90 px-5 py-4 backdrop-blur md:hidden">
-        <span className="font-bold"><span className="gradient-text">Admin</span> Panel</span>
-        <button className="btn-ghost btn-sm" aria-expanded={open} aria-controls="admin-mobile-nav" onClick={() => setOpen((v) => !v)}>
+        <span className="font-bold">
+          <span className="gradient-text">Admin</span> Panel
+        </span>
+
+        <button
+          className="btn-ghost btn-sm"
+          aria-expanded={open}
+          aria-controls="admin-mobile-nav"
+          onClick={() => setOpen((value) => !value)}
+        >
           {open ? 'Close' : 'Menu'}
         </button>
       </div>
+
       {open && (
         <div id="admin-mobile-nav" className="space-y-4 border-b border-line bg-bg p-5 md:hidden">
           {userBox}
           {nav}
-          <button onClick={handleLogout} className="btn-danger btn-sm w-full">Log out</button>
+          <button onClick={handleLogout} className="btn-danger btn-sm w-full">
+            Log out
+          </button>
         </div>
       )}
 
