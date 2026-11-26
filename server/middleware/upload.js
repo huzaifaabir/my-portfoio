@@ -1,31 +1,45 @@
 
 const multer = require('multer');
 
-// Images only, maximum 5 MB, one file per request.
-const imageUpload = multer({
-  storage: multer.memoryStorage(),
+const allowedImageTypes = /^image\/(jpeg|png|webp|gif)$/i;
 
+function imageFileFilter(req, file, cb) {
+  if (!allowedImageTypes.test(file.mimetype)) {
+    const error = new Error(
+      'Only JPG, PNG, WEBP or GIF images are allowed.'
+    );
+
+    error.status = 400;
+    return cb(error);
+  }
+
+  return cb(null, true);
+}
+
+const storage = multer.memoryStorage();
+
+// Existing single-image uploader.
+// Keep this for profile and project uploads.
+const imageUpload = multer({
+  storage,
   limits: {
     fileSize: 5 * 1024 * 1024,
     files: 1,
   },
-
-  fileFilter: (req, file, cb) => {
-    const allowed = /^image\/(jpeg|png|webp|gif)$/i.test(
-      file.mimetype
-    );
-
-    if (!allowed) {
-      const error = new Error(
-        'Only JPG, PNG, WEBP or GIF images are allowed.'
-      );
-
-      error.status = 400;
-      return cb(error);
-    }
-
-    return cb(null, true);
-  },
+  fileFilter: imageFileFilter,
 }).single('file');
 
-module.exports = { imageUpload };
+// Multiple-image uploader for Brand Partners.
+const multipleImageUpload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 10,
+  },
+  fileFilter: imageFileFilter,
+}).array('files', 10);
+
+module.exports = {
+  imageUpload,
+  multipleImageUpload,
+};
