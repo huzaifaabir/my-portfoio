@@ -112,40 +112,6 @@ function FloatingPhotoshopTools() {
   );
 }
 
-/* PHOTOSHOP TRANSFORM FRAME */
-
-function TransformOverlay() {
-  return (
-    <div className="transform-demo-overlay" aria-hidden="true">
-      <div className="transform-demo-animation">
-        <div className="transform-demo-box">
-          <span className="transform-handle handle-tl" />
-          <span className="transform-handle handle-tm" />
-          <span className="transform-handle handle-tr" />
-          <span className="transform-handle handle-ml" />
-          <span className="transform-handle handle-mr" />
-          <span className="transform-handle handle-bl" />
-          <span className="transform-handle handle-bm" />
-          <span className="transform-handle handle-br" />
-          <span className="transform-center-point" />
-        </div>
-
-        <div className="transform-demo-cursor">
-          <svg viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M4 2L4 29L11 22L16 35L21 33L16 20L27 20L4 2Z"
-              fill="#ec4382"
-              stroke="#171717"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* HOME PAGE */
 
 export default function Home() {
@@ -274,7 +240,15 @@ export default function Home() {
               )}
             </div>
 
-            {heroImage && <TransformOverlay />}
+            {heroImage && (
+              <div className="hero-identity-badge" aria-label="Creative professional: Design, Video, Storytelling">
+                <span className="hero-identity-dot" />
+                <span className="hero-identity-copy">
+                  <span className="hero-identity-label">Creative Professional</span>
+                  <span className="hero-identity-skills">Design <i /> Video <i /> Storytelling</span>
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </section>

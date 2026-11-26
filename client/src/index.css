@@ -456,332 +456,87 @@
 }
 
 /* =========================================
-   OUTSIDE TRANSFORM FRAME
+   HERO IDENTITY BADGE
 ========================================= */
 
-.hero-image-container {
+.hero-identity-badge {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  max-width: calc(100% - 2.5rem);
+  padding: .8rem 1rem;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 1rem;
+  background: rgba(10,10,16,.68);
+  box-shadow: 0 12px 36px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  animation: hero-badge-enter .8s .55s cubic-bezier(.22,1,.36,1) both;
+}
+
+.hero-identity-dot {
   position: relative;
-  overflow: visible;
-}
-
-.hero-image-frame {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-/* Overlay outside image */
-
-.transform-demo-overlay {
-  position: absolute;
-  inset: -18px;
-  z-index: 6;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.transform-demo-animation {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-}
-
-/* =========================================
-   SHARP RECTANGULAR TRANSFORM FRAME
-========================================= */
-
-.transform-demo-box {
-  position: absolute;
-  top: 18%;
-  left: 18%;
-  width: 64%;
-  height: 64%;
-
-  box-sizing: border-box;
-  border: none;
-  border-radius: 0 !important;
-
-  background: transparent !important;
-  background-color: transparent !important;
-
-  opacity: 0;
-
-  box-shadow:
-    0 0 12px rgba(236,67,130,.16),
-    0 0 24px rgba(124,92,255,.12);
-
-  animation: photoshop-transform-box 8s cubic-bezier(.4,0,.2,1) infinite;
-}
-
-/* Gradient stroke only */
-
-.transform-demo-box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1.5px;
-
-  border-radius: 0 !important;
-  box-sizing: border-box;
-
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #ec4382 35%,
-    #7c5cff 70%,
-    #ffffff 100%
-  );
-
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-
-  pointer-events: none;
-}
-
-/* =========================================
-   TRANSFORM HANDLES
-========================================= */
-
-.transform-handle {
-  position: absolute;
-  display: block;
-  width: 11px;
-  height: 11px;
-
-  border: 1px solid #fff;
-  border-radius: 0 !important;
-
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #ec4382 55%,
-    #7c5cff 100%
-  );
-
-  box-shadow:
-    0 0 8px rgba(236,67,130,.65),
-    0 1px 4px rgba(0,0,0,.5);
-
-  opacity: 0;
-  animation: transform-handles 8s ease-in-out infinite;
-}
-
-.handle-tl {
-  top: -5px;
-  left: -5px;
-}
-
-.handle-tm {
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.handle-tr {
-  top: -5px;
-  right: -5px;
-}
-
-.handle-ml {
-  top: 50%;
-  left: -5px;
-  transform: translateY(-50%);
-}
-
-.handle-mr {
-  top: 50%;
-  right: -5px;
-  transform: translateY(-50%);
-}
-
-.handle-bl {
-  bottom: -5px;
-  left: -5px;
-}
-
-.handle-bm {
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.handle-br {
-  bottom: -5px;
-  right: -5px;
-}
-
-/* CENTER POINT */
-
-.transform-center-point {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 7px;
-  height: 7px;
-
-  border: 1px solid #fff;
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #ec4382;
-
-  transform: translate(-50%,-50%);
-  opacity: 0;
-
-  animation: transform-handles 8s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(236,67,130,.75);
 }
 
-/* =========================================
-   CURSOR
-========================================= */
-
-.transform-demo-cursor {
+.hero-identity-dot::after {
+  content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-
-  width: 32px;
-  height: 40px;
-
-  z-index: 10;
-  opacity: 0;
-
-  filter: drop-shadow(1px 2px 2px rgba(0,0,0,.7));
-
-  animation: photoshop-cursor-move 8s cubic-bezier(.4,0,.2,1) infinite;
+  inset: -5px;
+  border: 1px solid rgba(236,67,130,.55);
+  border-radius: 50%;
+  animation: identity-dot-pulse 2.4s ease-out infinite;
 }
 
-.transform-demo-cursor svg {
-  display: block;
-  width: 100%;
-  height: 100%;
+.hero-identity-copy {
+  display: grid;
+  gap: .15rem;
+  min-width: 0;
 }
 
-/* =========================================
-   FRAME RESIZE ANIMATION
-========================================= */
-
-@keyframes photoshop-transform-box {
-
-  0%, 8% {
-    opacity: 0;
-    top: 18%;
-    left: 18%;
-    width: 64%;
-    height: 64%;
-  }
-
-  12% {
-    opacity: 1;
-    top: 18%;
-    left: 18%;
-    width: 64%;
-    height: 64%;
-  }
-
-  18% {
-    opacity: 1;
-    top: 18%;
-    left: 18%;
-    width: 64%;
-    height: 64%;
-  }
-
-  52% {
-    opacity: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  68% {
-    opacity: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  76%, 100% {
-    opacity: 0;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
+.hero-identity-label {
+  color: rgba(255,255,255,.92);
+  font-size: .68rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: .11em;
+  text-transform: uppercase;
 }
 
-/* HANDLE ANIMATION */
-
-@keyframes transform-handles {
-  0%, 11% {
-    opacity: 0;
-  }
-
-  16%, 68% {
-    opacity: 1;
-  }
-
-  76%, 100% {
-    opacity: 0;
-  }
+.hero-identity-skills {
+  display: flex;
+  align-items: center;
+  gap: .42rem;
+  color: rgba(255,255,255,.58);
+  font-size: .66rem;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
-/* CURSOR DRAG ANIMATION */
+.hero-identity-skills i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
 
-@keyframes photoshop-cursor-move {
+@keyframes hero-badge-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  0%, 8% {
-    left: 82%;
-    top: 82%;
-    opacity: 0;
-    transform: scale(.8);
-  }
-
-  12% {
-    left: 82%;
-    top: 82%;
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  18% {
-    left: 82%;
-    top: 82%;
-    opacity: 1;
-    transform: scale(.92);
-  }
-
-  52% {
-    left: 100%;
-    top: 100%;
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  68% {
-    left: 100%;
-    top: 100%;
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  76% {
-    left: 100%;
-    top: 100%;
-    opacity: 0;
-    transform: scale(.8);
-  }
-
-  100% {
-    left: 82%;
-    top: 82%;
-    opacity: 0;
-    transform: scale(.8);
-  }
+@keyframes identity-dot-pulse {
+  0% { opacity: .7; transform: scale(.65); }
+  80%, 100% { opacity: 0; transform: scale(1.7); }
 }
 
 /* =========================================
@@ -853,29 +608,7 @@
     left: 75%;
   }
 
-  .transform-demo-overlay {
-    inset: -12px;
-  }
 
-  .transform-demo-box {
-    border-radius: 0 !important;
-  }
-
-  .transform-demo-box::before {
-    border-radius: 0 !important;
-    padding: 1.5px;
-  }
-
-  .transform-handle {
-    width: 9px;
-    height: 9px;
-    border-radius: 0 !important;
-  }
-
-  .transform-demo-cursor {
-    width: 26px;
-    height: 33px;
-  }
 }
 
 /* =========================================
@@ -913,8 +646,7 @@
     -webkit-text-fill-color: #ec4382 !important;
   }
 
-  .hero-tool-icon,
-  .transform-demo-overlay {
+  .hero-tool-icon {
     animation: none !important;
     display: none !important;
   }
